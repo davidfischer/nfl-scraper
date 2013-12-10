@@ -23,5 +23,9 @@ Download the data from a specific historical year (2001+):
 
     % scrapy crawl historicalspider -a year=2011
 
+Download the data from a specific historical year and week (regular season):
+
+    % scrapy crawl historicalspider -a year=2011 -a week=11
+
 
 [scrapy-link]: http://scrapy.org/
