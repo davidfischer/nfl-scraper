@@ -15,13 +15,14 @@ class NflHistoricalSpider(NflScheduleSpider):
     GAMEBOOK_BASE_DIR = 'gamebooks'
     NFL_BASE_URL = 'http://www.nfl.com'
 
-    def __init__(self, year=None, week=None, *args, **kwargs):
+    def __init__(self, year=None, week=None, weektype='REG', *args, **kwargs):
         super(NflHistoricalSpider, self).__init__(*args, **kwargs)
         if year is None:
             self.log('No year specified!')
         else:
             self.year = year
             self.week = week
+            self.weektype = weektype
             self.url_pattern = r'^/scores/{}/\w+$'.format(year)
             self.start_urls = ['http://www.nfl.com/scores/{}/REG1'.format(year)]
 
@@ -45,5 +46,5 @@ class NflHistoricalSpider(NflScheduleSpider):
             href = link.xpath('@href').extract()[0]
             if re.search(self.url_pattern, href) is not None:
                 url = self.NFL_BASE_URL + href
-                if self.week is None or 'REG{}'.format(self.week) in url:
+                if self.week is None or '{}{}'.format(self.weektype, self.week) in url:
                     yield Request(url, callback=self.parse_week)
